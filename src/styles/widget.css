@@ -1,0 +1,93 @@
+/* widget base */
+.trk-root {
+  width: 360px;
+  max-width: 92vw;
+  background: linear-gradient(180deg,#ffffff,#fbfbff);
+  color: #111;
+  border: 1px solid rgba(15,23,42,0.06);
+  border-radius: 4px;
+  box-shadow: 10px 8px 30px #111;
+  border: 1px solid #111;
+  padding: 12px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* existing header line */
+.trk-root::before {
+  content: "TrackRak Rakuten In-Store Offer Activator";
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #072146;
+}
+
+
+/* close button top-right */
+#trackrak-widget-host { position: fixed; right: 18px; bottom: 18px; z-index: 2147483647; }
+.trk-close {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* form controls */
+.trk-login input {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 12px 12px;
+  border: 1px solid #111;
+  border-radius: 8px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+/* primary button */
+.trk-btn {
+     -webkit-text-size-adjust: 100%;
+    --trk-font: Arial, system-ui, -apple-system, "Segoe UI", Roboto;
+    --trk-text: #111111;
+    --trk-card-bg: #ffffff;
+    --trk-card-radius: 8px;
+    --trk-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    --trk-accent: #0366d6;
+    --trk-input-border: #d0d7de;
+    --trk-button-bg: #f4f4f4;
+    --trk-button-border: #888;
+    --trk-success: #0f5132;
+    --trk-error: #b42318;
+    font-family: sans-serif;
+    margin-top: 16px;
+    vertical-align: baseline;
+    line-height: normal;
+    color: #000000;
+    -webkit-appearance: button;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 40px;
+    font-size: 18px;
+    background-color: #95bb3c;
+    font-weight: bolder;
+    border: 2px solid #000;
+}
+.trk-btn:active { transform: translateY(1px); }
+.trk-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* messages */
+.trk-message { font-size: 13px; color: #0f172a; }
+.trk-msg { margin-top: 6px; color: #b00020; font-weight: 500; }
+
+/* progress */
+.trk-progress-bar { height: 12px; border-radius: 999px; overflow: hidden; background:#f1f5f9; }
+.trk-progress-fill { height:100%; width:0%; background: linear-gradient(90deg,#12c2e9,#c471ed); transition: width 300ms linear; }
+
+/* responsive smaller devices */
+@media (max-width: 420px) {
+  .trk-root { width: 94vw; padding: 10px; border-radius: 10px; }
+}

@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "TrackRak In-Store Activator",
+  "version": "1.0.0",
+  "description": "Widget to authenticate TrackRak premium users, collect Rakuten IDs and activate in-store offers.",
+  "action": {
+    "default_title": "TrackRak"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content-script.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/styles/*", "src/assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
