@@ -97,7 +97,33 @@
         font-size: 13px;
         box-sizing: border-box;
     }
-    .trk-btn { -webkit-text-size-adjust: 100%; --trk-font: Arial, system-ui, -apple-system, "Segoe UI", Roboto; --trk-text: #111111; --trk-card-bg: #ffffff; --trk-card-radius: 8px; --trk-shadow: 0 6px 18px rgba(0,0,0,0.12); --trk-accent: #0366d6; --trk-input-border: #d0d7de; --trk-button-bg: #f4f4f4; --trk-button-border: #888; --trk-success: #0f5132; --trk-error: #b42318; font-family: sans-serif; margin-top: 10px; vertical-align: baseline; line-height: normal; color: #000000; -webkit-appearance: button; cursor: pointer; padding: 7px 20px; border-radius: 50px; font-size: 18px; background-color: #95bb3c; font-weight: bolder; border: 2px solid #000;  }
+    .trk-btn { 
+      -webkit-text-size-adjust: 100%; 
+      --trk-font: Arial, system-ui, -apple-system, "Segoe UI", Roboto; 
+      --trk-text: #111111; 
+      --trk-card-bg: #ffffff; 
+      --trk-card-radius: 8px; 
+      --trk-shadow: 0 6px 18px rgba(0,0,0,0.12); 
+      --trk-accent: #0366d6; 
+      --trk-input-border: #d0d7de; 
+      --trk-button-bg: #f4f4f4; 
+      --trk-button-border: #888; 
+      --trk-success: #0f5132; 
+      --trk-error: #b42318; 
+      font-family: sans-serif; 
+      margin-top: 10px; 
+      vertical-align: baseline; 
+      line-height: normal; 
+      color: #000000; 
+      -webkit-appearance: button; 
+      cursor: pointer; 
+      padding: 7px 20px; 
+      border-radius: 50px; 
+      font-size: 18px; 
+      background-color: #95bb3c; 
+      font-weight: bolder; 
+      border: 2px solid #000 !important;  
+      }
     .trk-msg { margin-top:2px; color:#374151; font-size:13px; }
     .trk-progress-bar { width:100%; height:8px; background:#eef2ff; border-radius:6px; overflow:hidden; margin-top:8px; }
     .trk-progress-fill { height:100%; width:0%; background:#0b5fff; transition: width 240ms linear; }
