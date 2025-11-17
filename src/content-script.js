@@ -25,75 +25,83 @@
         border-radius: 4px;
         box-shadow: 10px 8px 30px #111;
         border: 1px solid #111;
-        padding: 12px;
+        padding: 9px;
         font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
+
     .trk-header {
-  display: flex;
-  align-items: flex-start; /* align children at top */
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-  padding-right: 4px; /* small breathing room for close */
-}
+      display: flex;
+      align-items: flex-start; /* align children at top */
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-right: 4px; /* small breathing room for close */
+    }
 
-.trk-head-left {
-  display: flex;
-  flex-direction: column; /* stack title above logo */
-  align-items: center;
-  gap: 6px;
-  text-align: center;
-  flex: 1; /* allow left block to take remaining width */
-}
+    .trk-head-left {
+      display: flex;
+      flex-direction: column; /* stack title above logo */
+      align-items: center;
+      gap: 6px;
+      text-align: center;
+      flex: 1; /* allow left block to take remaining width */
+    }
 
-.trk-title {
-  font-weight: 700;
-  font-size: 16px;
-  color: #000;
-  line-height: 1.1;
-  margin: 0;
-}
+    .trk-content {
+      align-items: center;
+      text-align: center;
+    }
 
-.trk-logo {
-  width: auto;
-  height: 100px;
-  border-radius: 6px;
-  object-fit: cover;
-  background: #f2f6ff;
-  margin-top: 2px;
-}
+    .trk-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #000;
+      line-height: 1.1;
+      margin: 0;
+    }
 
-/* Close button pinned top-right with no extra vertical offset */
-.trk-close {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: #6b7280;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  align-self: flex-start; /* ensure it stays at the top in the header row */
-}
-.trk-close:hover {
-  background: rgba(11,95,255,0.06);
-  color: #0b5fff;
-}
+    .trk-logo {
+      width: auto;
+      height: 100px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #f2f6ff;
+      margin-top: 6px;
+    }
+
+    /* Close button pinned top-right with no extra vertical offset */
+    .trk-close {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      align-self: flex-start; /* ensure it stays at the top in the header row */
+    }
+    .trk-close:hover {
+      background: rgba(11,95,255,0.06);
+      color: #0b5fff;
+    }
 
     .trk-login input { 
         display: block;
         width: 100%;
         margin: 6px 0;
         padding: 12px 12px;
+        background-color: #fff;
+        color: #111;
         border: 1px solid #111;
         border-radius: 8px;
         font-size: 13px;
         box-sizing: border-box;
     }
     .trk-btn { -webkit-text-size-adjust: 100%; --trk-font: Arial, system-ui, -apple-system, "Segoe UI", Roboto; --trk-text: #111111; --trk-card-bg: #ffffff; --trk-card-radius: 8px; --trk-shadow: 0 6px 18px rgba(0,0,0,0.12); --trk-accent: #0366d6; --trk-input-border: #d0d7de; --trk-button-bg: #f4f4f4; --trk-button-border: #888; --trk-success: #0f5132; --trk-error: #b42318; font-family: sans-serif; margin-top: 10px; vertical-align: baseline; line-height: normal; color: #000000; -webkit-appearance: button; cursor: pointer; padding: 7px 20px; border-radius: 50px; font-size: 18px; background-color: #95bb3c; font-weight: bolder; border: 2px solid #000;  }
-    .trk-msg { margin-top:8px; color:#374151; font-size:13px; }
+    .trk-msg { margin-top:2px; color:#374151; font-size:13px; }
     .trk-progress-bar { width:100%; height:8px; background:#eef2ff; border-radius:6px; overflow:hidden; margin-top:8px; }
     .trk-progress-fill { height:100%; width:0%; background:#0b5fff; transition: width 240ms linear; }
-    .trk-action { display:flex; flex-direction:column; gap:8px; }
+    .trk-action { display:flex; flex-direction:column; gap:5px; align-items: center; text-align: center;}
   `;
 
   // small helper: create element with class/text
@@ -163,7 +171,8 @@
       closeBtn.id = "trk-close";
       closeBtn.addEventListener("click", () => {
         const h = document.getElementById(HOST_ID);
-        h && h.remove();
+        if (h) h.remove();
+        chrome.storage.local.set({ widgetClosed: true });
       });
 
       // Assemble header: left block then close button (right)
@@ -193,11 +202,11 @@
 
     const email = el("input");
     email.type = "email";
-    email.placeholder = "Email";
+    email.placeholder = "TrackRak Email";
     email.id = "trk-email";
     const pass = el("input");
     pass.type = "password";
-    pass.placeholder = "Password";
+    pass.placeholder = "TrakRak Password";
     pass.id = "trk-pass";
 
     const btn = el("button", "trk-btn", "Login");
@@ -566,55 +575,75 @@
     const hasPremium = await checkPremium();
     if (!hasPremium) {
       // render login UI
-      renderLogin(content, async (email, password) => {
-        console.log("[TrackRak] login submit", email && "***");
-        const resp = await loginWithTrackRakApi(email, password);
-        if (!resp) {
-          renderMessage(
-            content,
-            "An error occurred during login. Please try again."
-          );
-          return;
-        }
-        if (resp.status === 401) {
-          renderMessage(content, "Invalid credentials, please try again");
-          return;
-        }
-        const json = resp.jsonBody || null;
-        if (json && json.message === "authorized" && json.plan === "premium") {
-          // write boolean true into chrome.storage.local and confirm
-          const ok = await storageSet(STORAGE_KEY_PREMIUM, true);
-          console.log("[TrackRak] storageSet premium ->", ok);
-          if (!ok) {
+
+      function attemptLogin() {
+        renderLogin(content, async (email, password) => {
+          console.log("[TrackRak] login submit", email && "***");
+          const resp = await loginWithTrackRakApi(email, password);
+          if (!resp) {
             renderMessage(
               content,
-              "Login succeeded but we could not persist the session. Try again or reload the page."
+              "An error occurred during login. Please try again.",
+              "Try Again",
+              attemptLogin
+            );
+            return;
+          }
+          if (resp.status === 401) {
+            renderMessage(
+              content,
+              "Invalid credentials, please try again.",
+              "Try Again",
+              attemptLogin
             );
             return;
           }
 
-          // NEW BEHAVIOR: After login, instruct user to go to Rakuten In-Store page
-          renderMessage(
-            content,
-            "Please click below to navigate to the Rakuten In-Store page",
-            "Go to Rakuten In-Store",
-            () => {
-              try {
-                window.open("https://rakuten.com/in-store", "_blank");
-              } catch (e) {
-                location.href = "https://rakuten.com/in-store";
-              }
-              const h = document.getElementById(HOST_ID);
-              h && h.remove();
+          const json = resp.jsonBody || null;
+          if (
+            json &&
+            json.message === "authorized" &&
+            json.plan === "premium"
+          ) {
+            const ok = await storageSet(STORAGE_KEY_PREMIUM, true);
+            console.log("[TrackRak] storageSet premium ->", ok);
+            if (!ok) {
+              renderMessage(
+                content,
+                "Login succeeded but we could not persist the session. Try again or reload the page.",
+                "Try Again",
+                attemptLogin
+              );
+              return;
             }
-          );
 
-          return;
-        } else {
-          await storageSet(STORAGE_KEY_PREMIUM, false);
-          renderMessage(content, "Please upgrade your plan to premium");
-        }
-      });
+            renderMessage(
+              content,
+              "Click below to navigate to the Rakuten In-Store page.",
+              "Go to Rakuten In-Store",
+              () => {
+                try {
+                  window.open("https://rakuten.com/in-store", "_blank");
+                } catch (e) {
+                  location.href = "https://rakuten.com/in-store";
+                }
+                const h = document.getElementById(HOST_ID);
+                h && h.remove();
+              }
+            );
+            return;
+          } else {
+            await storageSet(STORAGE_KEY_PREMIUM, false);
+            renderMessage(
+              content,
+              "Upgrade your plan to Premium to add Rakuten In-Store offers."
+            );
+          }
+        });
+      }
+
+      attemptLogin();
+
       return;
     }
 
@@ -632,7 +661,7 @@
     if (!allowed.some((a) => currentUrl.startsWith(a))) {
       renderMessage(
         content,
-        "Please click below to navigate to the Rakuten In-Store page",
+        "Click below to navigate to the Rakuten In-Store page.",
         "Go to Rakuten In-Store",
         () => {
           try {
@@ -651,7 +680,7 @@
       // still prompt sign-in and Try Again
       renderMessage(
         content,
-        "Please sign in to your Rakuten account",
+        "Please sign in to your Rakuten account.",
         "Try Again",
         async () => {
           const parsed = parseRakutenIdsFromPage();
@@ -663,7 +692,7 @@
           } else {
             renderMessage(
               content,
-              "Still not signed in. Please sign in on Rakuten and then click Try Again."
+              "Still not signed in. Please sign in on Rakuten, then click Try Again."
             );
           }
         }
@@ -680,7 +709,7 @@
   async function renderActivateFlow(content) {
     renderAction(
       content,
-      "Click to activate offers",
+      "Click below to activate offers.",
       "Activate Offers",
       async () => {
         renderProgress(content);
@@ -714,14 +743,14 @@
         if (result && result.noCards) {
           renderMessage(
             content,
-            "Unable to activate offers. Please add a card to your wallet in Rakuten, refresh the page, and try again!"
+            "Unable to activate offers. Add at least one card to your Rakuten wallet, refresh the page, and try again."
           );
           return;
         }
 
         renderMessage(
           content,
-          `Activation finished. ${result ? result.done : 0} offers processed.`
+          `Offer activation finished. ${result ? result.done : 0} offers added.`
         );
         setTimeout(() => {
           try {
@@ -736,7 +765,13 @@
 
   // start
   try {
-    startWidget();
+    chrome.storage.local.get("widgetClosed", (res) => {
+      if (!res.widgetClosed) {
+        startWidget();
+      } else {
+        console.log("[TrackRak] widgetClosed flag set, skipping widget render");
+      }
+    });
   } catch (err) {
     console.error("[TrackRak] startWidget error", err);
   }
@@ -752,4 +787,12 @@
     },
     false
   );
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "reopenWidget") {
+      chrome.storage.local.set({ widgetClosed: false }, () => {
+        startWidget();
+      });
+    }
+  });
 })();
