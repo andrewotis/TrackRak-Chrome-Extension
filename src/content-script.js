@@ -564,6 +564,18 @@
     const { root, content } = buildUI();
     console.log("[TrackRak] widget started");
 
+    const storedMsg = await storageGet("activationMessage");
+    if (storedMsg) {
+      renderMessage(content, storedMsg, "Dismiss", () => {
+        chrome.storage.local.set({ widgetClosed: true }, () => {
+          const h = document.getElementById("trackrak-widget-host");
+          h && h.remove();
+        });
+      });
+      await chrome.storage.local.remove("activationMessage");
+      return;
+    }
+
     // helper to check premium persistence
     async function checkPremium() {
       const v = await storageGet(STORAGE_KEY_PREMIUM);
@@ -748,10 +760,11 @@
           return;
         }
 
-        renderMessage(
-          content,
-          `Offer activation finished. ${result ? result.done : 0} offers added.`
-        );
+        const finalMessage = `Offer activation finished. ${
+          result ? result.done : 0
+        } offers added.`;
+        await chrome.storage.local.set({ activationMessage: finalMessage });
+
         setTimeout(() => {
           try {
             window.location.reload();
@@ -759,6 +772,18 @@
             location.href = location.href;
           }
         }, 800);
+
+        // renderMessage(
+        //   content,
+        //   `Offer activation finished. ${result ? result.done : 0} offers added.`
+        // );
+        // setTimeout(() => {
+        //   try {
+        //     window.location.reload();
+        //   } catch (e) {
+        //     location.href = location.href;
+        //   }
+        // }, 800);
       }
     );
   }
@@ -792,7 +817,9 @@
     if (message.action === "reopenWidget") {
       chrome.storage.local.set({ widgetClosed: false }, () => {
         startWidget();
+        sendResponse({ ok: true });
       });
+      return true;
     }
   });
 })();
