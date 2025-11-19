@@ -232,7 +232,7 @@
     email.id = "trk-email";
     const pass = el("input");
     pass.type = "password";
-    pass.placeholder = "TrakRak Password";
+    pass.placeholder = "TrackRak Password";
     pass.id = "trk-pass";
 
     const btn = el("button", "trk-btn", "Login");
@@ -730,7 +730,7 @@
           } else {
             renderMessage(
               content,
-              "Still not signed in. Please sign in on Rakuten, then click Try Again."
+              "Still not signed in. Please sign in on Rakuten to proceed."
             );
           }
         }
