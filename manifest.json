@@ -3,7 +3,7 @@
   "name": "TrackRak In-Store Activator",
   "version": "1.0.0",
   "description": "Widget to authenticate TrackRak premium users, collect Rakuten IDs and activate in-store offers.",
-  "icons": {
+    "icons": {
     "16": "src/assets/icon16.png",
     "32": "src/assets/icon32.png",
     "48": "src/assets/icon48.png",
@@ -32,11 +32,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "src/styles/*",
-        "src/assets/*",
-        "assets/*"
-      ],
+      "resources": ["src/assets/*"],
       "matches": ["<all_urls>"]
     }
   ]

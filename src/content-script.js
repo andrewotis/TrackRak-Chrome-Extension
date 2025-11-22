@@ -816,11 +816,17 @@
 
   // start
   try {
+    // Treat a missing `widgetClosed` key as `true` (closed by default).
+    // This ensures the extension does not auto-open the widget on first
+    // install — the user must open it via the extension toolbar icon.
     chrome.storage.local.get("widgetClosed", (res) => {
-      if (!res.widgetClosed) {
+      const closed = res && Object.prototype.hasOwnProperty.call(res, "widgetClosed")
+        ? res.widgetClosed
+        : true; // default to closed when key is absent
+      if (!closed) {
         startWidget();
       } else {
-        console.log("[TrackRak] widgetClosed flag set, skipping widget render");
+        console.log("[TrackRak] widgetClosed flag set (default true), skipping widget render");
       }
     });
   } catch (err) {
