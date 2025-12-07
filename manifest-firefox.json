@@ -1,15 +1,15 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "TrackRak Rakuten In-Store Activator",
   "version": "1.0.1",
   "description": "Instantly activate every Rakuten In-Store offer so you never miss a deal! For Premium TrackRak members only.",
-    "icons": {
+  "icons": {
     "16": "src/assets/icon16.png",
     "32": "src/assets/icon32.png",
     "48": "src/assets/icon48.png",
     "128": "src/assets/icon128.png"
   },
-  "action": {
+  "browser_action": {
     "default_title": "TrackRak",
     "default_icon": {
       "16": "src/assets/icon16.png",
@@ -17,12 +17,11 @@
       "48": "src/assets/icon48.png"
     }
   },
-  "homepage_url": "https://trackrak.com",
+  "homepage_url": "https://www.trackrak.com",
   "background": {
-    "service_worker": "src/background.js"
+    "scripts": ["src/background-firefox.js"]
   },
-  "permissions": ["storage"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["storage", "tabs", "<all_urls>"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -32,9 +31,16 @@
     }
   ],
   "web_accessible_resources": [
-    {
-      "resources": ["src/assets/*"],
-      "matches": ["<all_urls>"]
+    "src/assets/*"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "com.trackrak@trackrak.com",
+      "strict_min_version": "113.0",
+      "data_collection_permissions": {
+        "required": ["none"],
+        "optional": []
+      }
     }
-  ]
+  }
 }

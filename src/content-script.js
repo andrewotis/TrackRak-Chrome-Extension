@@ -195,10 +195,13 @@
       // Close button stays as a sibling (top-right)
       const closeBtn = el("button", "trk-close", "✕");
       closeBtn.id = "trk-close";
-      closeBtn.addEventListener("click", () => {
+      closeBtn.addEventListener("click", async () => {
         const h = document.getElementById(HOST_ID);
         if (h) h.remove();
-        chrome.storage.local.set({ widgetClosed: true });
+        // Use storageSet so other tabs receive the localStorage signal.
+        try {
+          await storageSet("widgetClosed", true);
+        } catch (e) {}
       });
 
       // Assemble header: left block then close button (right)
@@ -592,13 +595,12 @@
 
     const storedMsg = await storageGet("activationMessage");
     if (storedMsg) {
-      renderMessage(content, storedMsg, "Dismiss", () => {
-        chrome.storage.local.set({ widgetClosed: true }, () => {
-          const h = document.getElementById("trackrak-widget-host");
-          h && h.remove();
-        });
+      renderMessage(content, storedMsg, "Dismiss", async () => {
+        await storageSet("widgetClosed", true);
+        const h = document.getElementById("trackrak-widget-host");
+        h && h.remove();
       });
-      await chrome.storage.local.remove("activationMessage");
+      await storageRemove("activationMessage");
       return;
     }
 
@@ -789,7 +791,7 @@
         const finalMessage = `Offer activation finished. ${
           result ? result.done : 0
         } offers added.`;
-        await chrome.storage.local.set({ activationMessage: finalMessage });
+        await storageSet("activationMessage", finalMessage);
 
         setTimeout(() => {
           try {
@@ -847,7 +849,7 @@
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "reopenWidget") {
-      chrome.storage.local.set({ widgetClosed: false }, () => {
+      storageSet("widgetClosed", false).then(() => {
         startWidget();
         sendResponse({ ok: true });
       });

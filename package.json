@@ -1,0 +1,17 @@
+{
+  "name": "trackrak-in-store-activator",
+  "version": "1.0.0",
+  "description": "TrackRak extension — build helpers",
+  "scripts": {
+    "build:prod": "node build/build-prod.js",
+    "build:firefox-temp": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts\\build-firefox-temp.ps1",
+    "firefox:run": "npm run build:prod && npx web-ext run --source-dir dist/firefox",
+    "firefox:run:exe": "npm run build:prod && npx web-ext run --source-dir dist/firefox --firefox",
+    "chrome:run": "npm run build:prod && node build/run-chrome.js"
+  },
+  "devDependencies": {
+    "javascript-obfuscator": "^4.0.0",
+    "terser": "^5.16.0",
+    "archiver": "^5.3.0"
+  }
+}
